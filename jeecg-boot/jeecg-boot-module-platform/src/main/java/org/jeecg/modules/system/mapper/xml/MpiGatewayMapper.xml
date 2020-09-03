@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.system.mapper.MpiGatewayMapper">
+
+    <!-- 根据公司编号查询公司信息 批量 -->
+    <select id="listGatewayCompanyByIds" resultType="org.jeecg.modules.system.vo.MpiGatewayCompanyVo">
+        SELECT g.id,c.company_name as companyName
+        FROM mpi_gateway g,mpi_company c
+        WHERE g.company_id = c.id and g.id in
+        <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>

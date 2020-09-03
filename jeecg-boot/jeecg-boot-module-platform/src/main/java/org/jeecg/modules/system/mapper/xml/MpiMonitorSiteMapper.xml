@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.system.mapper.MpiMonitorSiteMapper">
+
+    <!-- 根据设备信息查询 监测点 -->
+    <select id="querySiteListByEquipment" resultType="org.jeecg.modules.system.entity.MpiMonitorSite">
+        SELECT m.*
+        FROM mpi_equipment e,mpi_equipment_component c,mpi_monitor_site m
+        WHERE c.equipment_id = e.id and m.component_id = c.id and e.id =  #{equipmentId}
+    </select>
+</mapper>

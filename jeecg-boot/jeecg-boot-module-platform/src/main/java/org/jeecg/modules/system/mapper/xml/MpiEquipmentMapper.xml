@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.system.mapper.MpiEquipmentMapper">
+
+    <!-- 根据设备编号查询网关信息 批量 -->
+    <select id="listEquipmentGatewayByIds" resultType="org.jeecg.modules.system.vo.MpiEquipmentGatewayVo">
+        SELECT e.id,g.gateway_name as gatewayName
+        FROM mpi_gateway g,mpi_equipment e
+        WHERE g.id = e.gateway_id and e.id in
+        <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>
