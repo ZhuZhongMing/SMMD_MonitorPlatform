@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.Date;
 
+import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.getMQTTConnect;
+import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.reconnectionMQTT;
 import static org.jeecg.modules.listener.utils.QFMessageDispose.QFMessageDispose;
 
 
@@ -50,7 +52,8 @@ public class QianFuSub implements MqttCallback {
     // 连接丢失
     @Override
     public void connectionLost(Throwable throwable) {
-        log.warn("【MQTT】【" + clientId + "】连接断开，30S后重新尝试重连......");
+        reconnectionMQTT(sampleClient,clientId);
+        /*log.warn("【MQTT】【" + clientId + "】连接断开，30S后重新尝试重连......");
         while (true) {
             try {
                 sampleClient.close();
@@ -62,7 +65,7 @@ public class QianFuSub implements MqttCallback {
                 e.printStackTrace();
                 log.error("【MQTT】【" + clientId + "】重连时发生异常！异常信息：" + e);
             }
-        }
+        }*/
     }
 
     /**
@@ -84,9 +87,11 @@ public class QianFuSub implements MqttCallback {
 
             if (null != varList) {
                 String devNo = json.getString("devNo");
-                log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + varList);
                 QFPressModel qfPressModel = QFMessageDispose(varList);
                 qfPressModel.setEquipmentsn(devNo);
+                if ("null".equals(qfPressModel.getCounterDisplay()) || null == qfPressModel.getCounterDisplay()) {
+                    qfPressModel.setCounterDisplay("0");
+                }
                 iqfPressModelService.save(qfPressModel);
                 log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + qfPressModel);
             }
@@ -111,7 +116,9 @@ public class QianFuSub implements MqttCallback {
      */
     @PostConstruct
     public void  run() {
-        MemoryPersistence persistence = new MemoryPersistence();
+        sampleClient = getMQTTConnect(host, clientId, name, password, topic);
+        sampleClient.setCallback(this);
+        /*MemoryPersistence persistence = new MemoryPersistence();
         try{
             sampleClient = new MqttClient(host, clientId, persistence);
             // 连接设置
@@ -140,6 +147,6 @@ public class QianFuSub implements MqttCallback {
 
         }catch(MqttException me){
             log.error("【MQTT】【" + clientId + "】连接时发生异常！异常信息：" + me);
-        }
+        }*/
     }
 }

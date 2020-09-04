@@ -28,7 +28,7 @@ export default {
             data: [ { name: '负载', value: 0 } ],
             center: ['50', '60'],
             min: 0,
-            max: 100,
+            max: 200,
             splitNum: 6,
             axisLabel: {
               formatter: '{value}',
@@ -58,7 +58,7 @@ export default {
             data: [ { name: '负载', value: 0 } ],
             center: ['50', '60'],
             min: 0,
-            max: 100,
+            max: 200,
             splitNum: 6,
             axisLabel: {
               formatter: '{value}',
@@ -88,7 +88,7 @@ export default {
             data: [ { name: '负载', value: 0 } ],
             center: ['50', '60'],
             min: 0,
-            max: 100,
+            max: 200,
             splitNum: 6,
             axisLabel: {
               formatter: '{value}',
@@ -118,7 +118,7 @@ export default {
             data: [ { name: '负载', value: 0 } ],
             center: ['50', '60'],
             min: 0,
-            max: 100,
+            max: 200,
             splitNum: 6,
             axisLabel: {
               formatter: '{value}',
@@ -157,7 +157,7 @@ export default {
             data: [ { name: '负载', value: this.model.spindleload } ],
             center: ['50', '60'],
             min: 0,
-            max: 100,
+            max: 200,
             splitNum: 6,
             axisLabel: {
               formatter: '{value}',
@@ -187,7 +187,7 @@ export default {
             data: [ { name: '负载', value: this.model.xload } ],
             center: ['50', '60'],
             min: 0,
-            max: 100,
+            max: 200,
             splitNum: 6,
             axisLabel: {
               formatter: '{value}',
@@ -217,7 +217,7 @@ export default {
             data: [ { name: '负载', value: this.model.yload } ],
             center: ['50', '60'],
             min: 0,
-            max: 100,
+            max: 200,
             splitNum: 6,
             axisLabel: {
               formatter: '{value}',
@@ -247,7 +247,7 @@ export default {
             data: [ { name: '负载', value: this.model.zload } ],
             center: ['50', '60'],
             min: 0,
-            max: 100,
+            max: 200,
             splitNum: 6,
             axisLabel: {
               formatter: '{value}',

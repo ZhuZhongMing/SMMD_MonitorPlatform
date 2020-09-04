@@ -36,7 +36,6 @@ public class QFPressModel implements Serializable {
     @TableField("equipmentsn")
     private String equipmentsn;
 
-
     /**系统压力显示值**/
     @TableField("SystemPressureValue")
     private String SystemPressureValue;
@@ -148,10 +147,6 @@ public class QFPressModel implements Serializable {
     /**主缸位置显示值**/
     @TableField("MasterCylinder_PositionValue")
     private String MasterCylinder_PositionValue;
-
-
-
-
 
     /**主缸吨位显示值**/
     @TableField("MasterCylinder_TonnageValue")

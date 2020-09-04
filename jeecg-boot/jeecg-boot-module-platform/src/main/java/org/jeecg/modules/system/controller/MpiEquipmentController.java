@@ -138,7 +138,6 @@ public class MpiEquipmentController extends JeecgController<MpiEquipment, IMpiEq
 	 @ApiOperation(value="设备-根据公司编号查询设备ids", notes="设备-根据公司编号查询设备ids")
 	 @GetMapping(value = "/getEquipmentIdsByCompany")
 	 public Result<?> getEquipmentIdsByCompany(String id) {
-	 	log.info("companyId : " + id);
 		 /*按公司检索设备信息*/
 		 QueryWrapper<MpiGateway> queryWrapper = new QueryWrapper<>();
 		 queryWrapper.eq("company_id", id);
@@ -157,6 +156,32 @@ public class MpiEquipmentController extends JeecgController<MpiEquipment, IMpiEq
 		 List<String> ids1 = list1.stream().map(MpiEquipment::getId).collect(Collectors.toList());
 		 return Result.ok(ids1);
 	 }
+
+	/**
+	 * 根据公司编号查询设备s
+	 * id 公司编号
+	 * @return
+	 */
+	@ApiOperation(value="设备-根据公司编号查询设备s", notes="设备-根据公司编号查询设备s")
+	@GetMapping(value = "/getEquipmentListByCompany")
+	public Result<?> getEquipmentListByCompany(String id) {
+		/*按公司检索设备信息*/
+		QueryWrapper<MpiGateway> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("company_id", id);
+		List<MpiGateway> list = mpiGatewayService.list(queryWrapper);
+		QueryWrapper<MpiEquipment> queryWrapper1 = new QueryWrapper<>();
+		List<String> ids = new ArrayList<String>();
+		if (list.size() > 0) {
+			ids = list.stream().map(MpiGateway::getId).collect(Collectors.toList());
+			queryWrapper1.in("gateway_id",ids);
+		} else {
+			// 该公司下未查询到网关信息
+			ids.add("");
+			queryWrapper1.in("gateway_id",ids);
+		}
+		List<MpiEquipment> list1 = mpiEquipmentService.list(queryWrapper1);
+		return Result.ok(list1);
+	}
 
 	 /**
 	 * 分页列表查询

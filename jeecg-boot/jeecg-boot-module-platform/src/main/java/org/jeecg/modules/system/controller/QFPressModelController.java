@@ -1,13 +1,17 @@
 package org.jeecg.modules.system.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.modules.system.entity.hubin.HBTaskModel;
 import org.jeecg.modules.system.entity.qianfu.QFPressModel;
 import org.jeecg.modules.system.service.IHBTaskModelService;
 import org.jeecg.modules.system.service.IQFPressModelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,11 +23,25 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags="menu")
 @RestController
-@RequestMapping("/system/qf/press")
+@RequestMapping("/system/qf")
 @Slf4j
 public class QFPressModelController extends JeecgController<QFPressModel, IQFPressModelService> {
 
     @Autowired
     private IQFPressModelService iQFPressModelService;
+
+    /**
+     * 查询最新的指定设备名称的 钱富 数据
+     * @return
+     */
+    @ApiOperation(value="查询最新的指定设备名称的 钱富 数据", notes="查询最新的指定设备名称的 钱富 数据")
+    @GetMapping(value = "/queryByEquipmentId")
+    public Result<?> queryByEquipmentId(QFPressModel qfPressModel) {
+        QueryWrapper<QFPressModel> queryWrapper =  new QueryWrapper<>();
+        String lastSql = "where id in (select max(id) from qf_press_model where equipmentsn = '" + qfPressModel.getEquipmentsn() +"')";
+        queryWrapper.last(lastSql);
+        QFPressModel model = iQFPressModelService.list(queryWrapper).get(0);
+        return Result.ok(model);
+    }
 
 }

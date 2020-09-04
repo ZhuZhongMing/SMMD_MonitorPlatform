@@ -6,12 +6,15 @@
           <icon name="chart-bar"></icon>
         </span>
         <div class="d-flex">
-          <span class="fs-xl text mx-2">任务通过率</span>
+          <span class="fs-xl text mx-2">任务完成进度</span>
           <dv-decoration-3 style="width:1.25rem;height:.25rem; position:relative;top:-.0375rem;" />
         </div>
       </div>
       <div class="d-flex jc-center">
-        <centreLeft1Chart />
+        <!--<centreLeft1Chart />-->
+        <div style="width:2rem; height: 3rem; margin-top: 0.75rem;">
+          <dv-water-level-pond :config="config" style="width:100%;height:100%;" />
+        </div>
       </div>
       <!-- 4个主要的数据 -->
       <!--<div class="bottom-data">
@@ -31,11 +34,11 @@
 </template>
 
 <script>
-import centreLeft1Chart from "@/components/echart/centerLeft2/centreLeft1Chart";
+// import centreLeft1Chart from "@/components/echart/centerLeft2/centreLeft1Chart";
 export default {
   data() {
     return {
-      config: {
+      /*config: {
         lineWidth: 30,
         activeRadius: "80%",
         radius: "75%",
@@ -62,6 +65,11 @@ export default {
             value: 80
           }
         ]
+      },*/
+      config: {
+        data: [66],
+        shape: 'roundRect',
+        waveHeight: 15
       },
       numberData: [
         {
@@ -100,7 +108,7 @@ export default {
     };
   },
   components: {
-    centreLeft1Chart
+    // centreLeft1Chart
   },
   mounted() {
     this.changeTiming();

@@ -8,7 +8,7 @@
           <div class="d-flex jc-center">
             <dv-decoration-8 :color="['#568aea', '#000000']" style="width:2.5rem;height:.625rem;" />
             <div class="title">
-              <span class="title-text">大数据可视化平台</span>
+              <span class="title-text">生产设备详情</span>
               <dv-decoration-6
                 class="title-bototm"
                 :reverse="true"
@@ -33,17 +33,18 @@
               style="width: 6.25rem; text-align: left;background-color: #0f1325;"
             >
               <span class="react-before"></span>
-              <span class="text">数据分析1</span>
+              <span class="text"></span>
             </div>
-            <div class="react-right ml-3" style="background-color: #0f1325;">
+            <div class="react-right bg-color-blue ml-3">
+            <!--<div class="react-right ml-3" style="background-color: #0f1325;">-->
               <!--<span class="text colorBlue">数据分析2</span>-->
-              <span class="text fw-b">vue-big-screen</span>
+              <span class="text fw-b">当前设备：{{equipment.equipmentName}}</span>
             </div>
           </div>
           <div style="width: 40%" class="d-flex">
-            <div class="react-left bg-color-blue ml-3">
+            <div class="react-left ml-3" style="background-color: #0f1325;">
             <!--<div class="react-left bg-color-blue mr-3">-->
-              <span class="text fw-b">vue-big-screen</span>
+              <span class="text fw-b"></span>
             </div>
             <div
               class="react-left mr-4"
@@ -58,21 +59,26 @@
         <div class="body-box">
           <!-- 第三行数据 -->
           <div class="content-box">
+
+            <!-- 中间 -->
             <div>
               <dv-border-box-12>
-                <centerLeft1 />
+                <center @getEquipment="getEquipment" />
               </dv-border-box-12>
+            </div>
+            <!-- 中间 -->
+
+            <div>
+              <dv-border-box-10>
+                <centerLeft1 />
+              </dv-border-box-10>
             </div>
             <div>
               <dv-border-box-12>
                 <centerLeft2 />
               </dv-border-box-12>
             </div>
-            <!-- 中间 -->
-            <div>
-              <center />
-            </div>
-            <!-- 中间 -->
+
             <div>
               <centerRight2 />
             </div>
@@ -109,7 +115,8 @@ import bottomRight from "./bottomRight";
 export default {
   data() {
     return {
-      loading: true
+      loading: true,
+      equipment: {}
     };
   },
   components: {
@@ -129,6 +136,10 @@ export default {
       setTimeout(() => {
         this.loading = false;
       }, 500);
+    },
+    /*获取当前设备信息*/
+    getEquipment(item) {
+      this.equipment = item
     }
   }
 };

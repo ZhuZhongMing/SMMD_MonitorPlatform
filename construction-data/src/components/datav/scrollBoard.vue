@@ -32,10 +32,10 @@
           <span>X轴负载</span><span v-text="model.xload"></span>
         </p>
         <p>
-          <span>Y轴位置</span><span v-text="model.yload"></span>
+          <span>Y轴负载</span><span v-text="model.yload"></span>
         </p>
         <p>
-          <span>Z轴倍率</span><span v-text="model.zload"></span>
+          <span>Z轴负载</span><span v-text="model.zload"></span>
         </p>
       </div>
       <div>
@@ -43,10 +43,10 @@
           <span>A轴负载</span><span v-text="model.aload"></span>
         </p>
         <p>
-          <span>B轴位置</span><span v-text="model.bload"></span>
+          <span>B轴负载</span><span v-text="model.bload"></span>
         </p>
         <p>
-          <span>C轴倍率</span><span v-text="model.cload"></span>
+          <span>C轴负载</span><span v-text="model.cload"></span>
         </p>
       </div>
     </div>

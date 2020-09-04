@@ -1,22 +1,24 @@
 <template>
   <div id="center">
     <div class="up">
-      <div class="bg-color-black item" v-for="item in titleItem" :key="item.title">
-        <p class="ml-3 colorBlue fw-b">{{item.title}}</p>
-        <div>
-          <dv-digital-flop :config="item.number" style="width:1.25rem;height:.625rem;" />
+      <el-tooltip class="item" effect="dark" content="点击切换" placement="top" v-for="item in titleItem" :key="item.title">
+        <div class="bg-color-black item" @click="handlClickEquipment(item.info)">
+          <p class="ml-3 colorBlue fw-b">{{item.title}}</p>
+          <div>
+            <dv-digital-flop :config="item.number" style="width:1.25rem;height:.625rem;" />
+          </div>
         </div>
-      </div>
+      </el-tooltip>
     </div>
     <div class="down">
-      <div class="ranking bg-color-black">
+      <div class="ranking bg-color-black" style="width: 100%;"> <!--<div class="ranking bg-color-black">-->
         <span style="color:#5cd9e8">
           <icon name="align-left"></icon>
         </span>
-        <span class="fs-xl text mx-2 mb-1">年度负责人组件达标榜</span>
+        <span class="fs-xl text mx-2 mb-1">生产数量排行</span>
         <dv-scroll-ranking-board :config="ranking" style="height:2.75rem" />
       </div>
-      <div class="percent">
+      <!--<div class="percent">
         <div class="item bg-color-black">
           <span>今日任务通过率</span>
           <centerChart :id="rate[0].id" :tips="rate[0].tips" :colorObj="rate[0].colorData" />
@@ -28,106 +30,78 @@
         <div class="water">
           <dv-water-level-pond :config="water" style="height: 1.5rem" />
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
 
 <script>
-import centerChart from "@/components/echart/center/centerChartRate";
-
+// import centerChart from "@/components/echart/center/centerChartRate";
+import { getRequest } from '@/config/config'
 export default {
   data() {
     return {
-      titleItem: [
+      titleItem: [],
+      defaultTitleItem: [
         {
-          title: "今年累计任务建次数",
+          title: "QF_CNC_02",
+          info: {},
           number: {
-            number: [120],
+            number: ['离线'],
             toFixed: 1,
-            content: "{nt}"
+            content: "{nt}",
+            style: {
+              fontSize: 26,
+              fill: '#858f91'
+            }
           }
         },
         {
-          title: "本月累计任务次数",
+          title: "QF_SMART_03",
+          info: {},
           number: {
-            number: [18],
+            number: ['离线'],
             toFixed: 1,
-            content: "{nt}"
+            content: "{nt}",
+            style: {
+              fontSize: 26,
+              fill: '#858f91'
+            }
           }
         },
         {
-          title: "今日累计任务次数",
+          title: "QF_SMART_04",
+          info: {},
           number: {
-            number: [2],
+            number: ['离线'],
             toFixed: 1,
-            content: "{nt}"
-          }
-        },
-        {
-          title: "今年失败任务次数",
-          number: {
-            number: [14],
-            toFixed: 1,
-            content: "{nt}"
-          }
-        },
-        {
-          title: "今年成功任务次数",
-          number: {
-            number: [106],
-            toFixed: 1,
-            content: "{nt}"
-          }
-        },
-        {
-          title: "今年达标任务个数",
-          number: {
-            number: [100],
-            toFixed: 1,
-            content: "{nt}"
+            content: "{nt}",
+            style: {
+              fontSize: 26,
+              fill: '#858f91'
+            }
           }
         }
       ],
       ranking: {
-        data: [
-          {
-            name: "周口",
-            value: 55
-          },
-          {
-            name: "南阳",
-            value: 120
-          },
-          {
-            name: "西峡",
-            value: 78
-          },
-          {
-            name: "驻马店",
-            value: 66
-          },
-          {
-            name: "新乡",
-            value: 80
-          },
-          {
-            name: "新乡",
-            value: 80
-          },
-          {
-            name: "新乡",
-            value: 80
-          },
-          {
-            name: "新乡",
-            value: 80
-          }
-        ],
+        data: [],
         waitTime: 4000,
-        carousel: "page",
-        unit: "份"
+        unit: "件"
       },
+      defaultData: [
+        {
+          name: "QF_CNC_02",
+          value: 0
+        },
+        {
+          name: "QF_SMART_03",
+          value: 0
+        },
+        {
+          name: "QF_SMART_04",
+          value: 0
+        }
+      ],
       water: {
         data: [24, 45],
         shape: "roundRect",
@@ -164,13 +138,106 @@ export default {
             }
           }
         }
-      ]
+      ],
+      equipmentList: [],
+      /*当前设备信息*/
+      currentEquipment:{},
+      url: {
+        getEquipmentListByCompany: '/system/mpiEquipment/getEquipmentListByCompany',
+        queryByEquipmentId: '/system/qf/queryByEquipmentId'
+      }
     };
   },
   components: {
-    centerChart
+    // centerChart
     // centerChart1,
     // centerChart2
+  },
+  methods: {
+    /* 查询公司下的设备列表 */
+    getEquipmentListByCompany () {
+      /* 钱富：id -> 1301343481058353154 */
+      var param = { id: '1301343481058353154' }
+      getRequest(this.url.getEquipmentListByCompany, param).then(res => {
+        this.equipmentList = res.data.result
+        this.sortEquipmentDevCount () // 查询排行
+        this.currentEquipment = this.equipmentList[2] //默认查看钱富西门子2号设备
+        this.$emit("getEquipment",this.currentEquipment)
+        this.titleItem.splice(0)
+        for (let i = 0; i < this.equipmentList.length; i++) {
+          this.titleItem.push({
+            title: this.equipmentList[i].equipmentName,
+            info: this.equipmentList[i],
+            number: {
+              number: ['在线'],
+              toFixed: 1,
+              content: "{nt}"
+            }
+          })
+        }
+        for (let i = 0; i < this.defaultTitleItem.length; i++) {
+          this.titleItem.push(this.defaultTitleItem[i])
+        }
+      }).catch(exc => {
+        console.log('查询设备列表发生异常！异常信息：' + exc)
+      })
+    },
+    /*查询设备生产数量排行*/
+    sortEquipmentDevCount () {
+      this.ranking.data.splice(0) // 清空
+      const data = this.defaultData
+      /*for (let i = 0; i < this.defaultData; i++) {
+        data.push(this.defaultData[i])
+      }*/
+      for (let i = 0; i < this.equipmentList.length; i++) {
+        var param = {
+          equipmentsn : this.equipmentList[i].id
+        }
+        getRequest(this.url.queryByEquipmentId, param).then(res => {
+          if (res.data.result) {
+            data.push({
+              name: this.equipmentList[i].equipmentName,
+              value: parseInt(res.data.result.counterDisplay)
+            })
+          }  else {
+            data.push({
+              name: this.equipmentList[i].equipmentName,
+              value: parseInt(0)
+            })
+          }
+          this.ranking = {
+            data: data,
+            waitTime: 4000,
+            unit: "件"
+          }
+        }).catch(exc => {
+          console.log('设备生产数量发生异常！异常信息：' + exc)
+        })
+      }
+      //console.log("data : " + JSON.stringify(data))
+      /*this.ranking = {
+        data: data,
+        waitTime: 4000,
+        carousel: "page",
+        unit: "件"
+      }*/
+      //console.log("ranking : " + JSON.stringify(this.ranking))
+    },
+    /*点击切换设备*/
+    handlClickEquipment(item) {
+      if (item.id) {
+        this.currentEquipment = item
+        this.$emit("getEquipment",this.currentEquipment)
+      } else {
+        this.$message({
+          message: '该设备为离线状态',
+          type: 'warning'
+        });
+      }
+    }
+  },
+  mounted() {
+    this.getEquipmentListByCompany()
   }
 };
 </script>

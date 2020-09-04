@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 import static org.jeecg.modules.listener.utils.LDMessageDispose.mqttMessageDispose;
+import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.getMQTTConnect;
+import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.reconnectionMQTT;
 
 /**
  * 杭州三米明德科技有限公司
@@ -41,7 +43,8 @@ public class LiDengSub implements MqttCallback {
     // 连接丢失
     @Override
     public void connectionLost(Throwable throwable) {
-        log.warn("【MQTT】连接断开，30S后重新尝试重连......");
+        reconnectionMQTT(sampleClient,clientId);
+        /*log.warn("【MQTT】连接断开，30S后重新尝试重连......");
         while (true) {
             try {
                 sampleClient.close();
@@ -53,7 +56,7 @@ public class LiDengSub implements MqttCallback {
                 e.printStackTrace();
                 log.error("【MQTT】重连时发生异常！异常信息：" + e);
             }
-        }
+        }*/
     }
 
     /**
@@ -84,7 +87,9 @@ public class LiDengSub implements MqttCallback {
      */
     @PostConstruct
     public void  run() {
-        MemoryPersistence persistence = new MemoryPersistence();
+        sampleClient = getMQTTConnect(host, clientId, name, password, topic);
+        sampleClient.setCallback(this);
+        /*MemoryPersistence persistence = new MemoryPersistence();
         try{
             sampleClient = new MqttClient(host, clientId, persistence);
             // 连接设置
@@ -113,7 +118,7 @@ public class LiDengSub implements MqttCallback {
 
         }catch(MqttException me){
             log.error("【MQTT】连接时发生异常！异常信息：" + me);
-        }
+        }*/
     }
 
 }

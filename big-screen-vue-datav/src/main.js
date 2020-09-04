@@ -13,6 +13,16 @@ import 'vue-awesome/icons/chart-pie.js';
 import 'vue-awesome/icons/chart-line.js';
 import 'vue-awesome/icons/align-left.js';
 
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
+Vue.use(ElementUI)
+
+import Axios from 'axios'
+
+// 将axios挂载到原型上
+Vue.prototype.$axios = Axios
+
 // 全局注册图标
 Vue.component('icon', Icon);
 

@@ -116,7 +116,7 @@ public class CNCModel implements Serializable {
     @ApiModelProperty(value = "Y轴负载")
     private Float yload;
     /**Z轴负载**/
-    @ApiModelProperty(value = "Y轴负载")
+    @ApiModelProperty(value = "Z轴负载")
     private Float zload;
     /**A轴负载**/
     @ApiModelProperty(value = "A轴负载")

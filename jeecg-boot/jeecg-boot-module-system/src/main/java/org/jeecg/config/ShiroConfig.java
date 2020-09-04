@@ -72,8 +72,11 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/system/mpiGateway/allList", "anon");
 		//设备列表全查询
 		filterChainDefinitionMap.put("/system/mpiEquipment/allList", "anon");
+		filterChainDefinitionMap.put("/system/mpiEquipment/getEquipmentListByCompany", "anon");
 		//CNC数据
 		filterChainDefinitionMap.put("/system/cnc/**", "anon");
+		//钱富数据
+		filterChainDefinitionMap.put("/system/qf/**", "anon");
 
 		//cas验证登录
 		filterChainDefinitionMap.put("/cas/client/validateLogin", "anon");

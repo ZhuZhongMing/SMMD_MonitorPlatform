@@ -56,6 +56,7 @@ export default {
     return {
       /* 当前选中的设备信息 */
       equipment: '',
+      oldEquipment: '',
       url: {
         queryByEquipmentId: '/system/cnc/queryByEquipmentId'
       }
@@ -68,12 +69,21 @@ export default {
       this.equipment = item
       var param = { 'cncsn': this.equipment.id }
       getRequest(this.url.queryByEquipmentId, param).then(res => {
-        // console.log('result : ' + JSON.stringify(res.data.result))
-        this.$refs.rankingBoard.getCNCModel1(res.data.result)
-        this.$refs.machineInfo.getCNCModel2(res.data.result)
-        this.$refs.scrollBoard.getCNCModel3(res.data.result)
-        this.$refs.axle.getCNCModel4(res.data.result)
-        this.$refs.right.getCNCModel5(res.data.result)
+        if (res.data.result) {
+          // console.log('result : ' + JSON.stringify(res.data.result))
+          this.$refs.rankingBoard.getCNCModel1(res.data.result)
+          this.$refs.machineInfo.getCNCModel2(res.data.result)
+          this.$refs.scrollBoard.getCNCModel3(res.data.result)
+          this.$refs.axle.getCNCModel4(res.data.result)
+          this.$refs.right.getCNCModel5(res.data.result)
+          this.oldEquipment = this.equipment
+        } else {
+          this.$message({
+            message: '当前设备暂未开启',
+            type: 'warning'
+          })
+          this.equipment = this.oldEquipment
+        }
       }).catch(exc => {
         console.log('查询当前设备CNC数据发生异常！异常信息：' + exc)
       })
