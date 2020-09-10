@@ -75,7 +75,7 @@
             </div>
             <div>
               <dv-border-box-12>
-                <centerLeft2 />
+                <centerLeft2 ref="centerLeft2" />
               </dv-border-box-12>
             </div>
 
@@ -92,7 +92,7 @@
           <!-- 第四行数据 -->
           <div class="bototm-box">
             <dv-border-box-13>
-              <bottomLeft />
+              <bottomLeft ref="bottomLeft" />
             </dv-border-box-13>
             <dv-border-box-12>
               <bottomRight />
@@ -112,11 +112,17 @@ import centerRight2 from "./centerRight2";
 import center from "./center";
 import bottomLeft from "./bottomLeft";
 import bottomRight from "./bottomRight";
+import { getRequest } from '@/config/config'
 export default {
   data() {
     return {
       loading: true,
-      equipment: {}
+      equipment: {},
+      /*当前数据*/
+      pressModel: '',
+      url: {
+        queryByEquipmentId: '/system/qf/queryByEquipmentId'
+      }
     };
   },
   components: {
@@ -140,6 +146,20 @@ export default {
     /*获取当前设备信息*/
     getEquipment(item) {
       this.equipment = item
+      this.getQFPressModel()
+    },
+    getQFPressModel() {
+      var param = {
+        equipmentsn : this.equipment.id
+      }
+      // console.log(param)
+      getRequest(this.url.queryByEquipmentId, param).then(res => {
+        this.pressModel = res.data.result
+        this.$refs.centerLeft2.getPressModel2(this.pressModel)
+        this.$refs.bottomLeft.getPressModel3(this.pressModel)
+      }).catch(exc => {
+        console.log('设备数据发生异常！异常信息：' + exc)
+      })
     }
   }
 };

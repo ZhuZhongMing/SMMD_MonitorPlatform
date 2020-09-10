@@ -1,13 +1,10 @@
 package org.jeecg.modules.listener;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.jeecg.modules.system.entity.hubin.*;
-import org.jeecg.modules.system.entity.qianfu.QFMessageVO;
+import org.jeecg.modules.system.entity.CNCModel;
 import org.jeecg.modules.system.entity.qianfu.QFPressModel;
 import org.jeecg.modules.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.Date;
 
+import static org.jeecg.modules.listener.utils.CNCMessageDispose.mqttMessageDispose;
 import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.getMQTTConnect;
 import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.reconnectionMQTT;
 import static org.jeecg.modules.listener.utils.QFMessageDispose.QFMessageDispose;
@@ -48,6 +46,8 @@ public class QianFuSub implements MqttCallback {
 
     @Autowired
     private IQFPressModelService iqfPressModelService;
+    @Autowired
+    private ICNCModelService icncModelService;
 
     // 连接丢失
     @Override
@@ -78,22 +78,29 @@ public class QianFuSub implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) {
         log.info("=========================================================》【"+ clientId +"】接收消息成功！当前消息主题 : " + topic);
         try {
-            //String theMsg = MessageFormat.format("{0}", new String(message.getPayload()));
-            String pagLoad = new String(message.getPayload());
-            JSONObject jsonObject = JSONObject.parseObject(pagLoad);
-            JSONArray devList = jsonObject.getJSONArray("devList");
-            JSONObject json = (JSONObject) JSONObject.toJSON(devList.get(0));
-            JSONArray varList = json.getJSONArray("varList");
-
-            if (null != varList) {
-                String devNo = json.getString("devNo");
-                QFPressModel qfPressModel = QFMessageDispose(varList);
-                qfPressModel.setEquipmentsn(devNo);
-                if ("null".equals(qfPressModel.getCounterDisplay()) || null == qfPressModel.getCounterDisplay()) {
-                    qfPressModel.setCounterDisplay("0");
+            if ("/qianfu/cnc/siemens828d/001".equals(topic)) {
+                /*乐芯*/
+                CNCModel cncModel = mqttMessageDispose(message);
+                icncModelService.save(cncModel);
+                log.info("cnc : " + cncModel);
+            } else {
+                /*物通博联*/
+                //String theMsg = MessageFormat.format("{0}", new String(message.getPayload()));
+                String pagLoad = new String(message.getPayload());
+                JSONObject jsonObject = JSONObject.parseObject(pagLoad);
+                JSONArray devList = jsonObject.getJSONArray("devList");
+                JSONObject json = (JSONObject) JSONObject.toJSON(devList.get(0));
+                JSONArray varList = json.getJSONArray("varList");
+                if (null != varList) {
+                    String devNo = json.getString("devNo");
+                    QFPressModel qfPressModel = QFMessageDispose(varList);
+                    qfPressModel.setEquipmentsn(devNo);
+                    if ("null".equals(qfPressModel.getCounterdisplay()) || null == qfPressModel.getCounterdisplay()) {
+                        qfPressModel.setCounterdisplay("0");
+                    }
+                    iqfPressModelService.save(qfPressModel);
+                    log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + qfPressModel);
                 }
-                iqfPressModelService.save(qfPressModel);
-                log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + qfPressModel);
             }
         } catch (Exception e) {
             System.out.println("无用消息");

@@ -173,6 +173,7 @@ mybatis-plus:
     #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     # 返回类型为Map,显示null对应的字段
     call-setters-on-nulls: true
+    #map-underscore-to-camel-case: false #驼峰命名转换
 #jeecg专用配置
 jeecg :
   # 本地：local\Minio：minio\阿里云：alioss
@@ -245,7 +246,7 @@ mqtt:
   topic:
     lideng: /lideng/cnc/fanuc/001,/lideng/cnc/fanuc/002,/lideng/cnc/fanuc/003
     hubin: /sys/hubin/message
-    qianfu: /qianfu/device/press1/message,/qianfu/device/press2/message
+    qianfu: /qianfu/device/press1/message,/qianfu/device/press2/message,/qianfu/cnc/siemens828d/001
   clientId:
     lideng: lideng_consumer
     hubin: hubin_consumer

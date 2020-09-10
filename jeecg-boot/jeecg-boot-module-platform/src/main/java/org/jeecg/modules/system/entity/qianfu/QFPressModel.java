@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -21,6 +22,7 @@ import java.util.Date;
  * @author zzm
  * date 2020-08-28
  */
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
@@ -33,156 +35,110 @@ public class QFPressModel implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long id;
     /**设备编号**/
-    @TableField("equipmentsn")
     private String equipmentsn;
 
     /**系统压力显示值**/
-    @TableField("SystemPressureValue")
-    private String SystemPressureValue;
+    private String systempressurevalue;
     /**主缸压力显示值**/
-    @TableField("MasterCylinder_PressureValue")
-    private String MasterCylinder_PressureValue;
+    private String mastercylinderPressurevalue;
     /**系统液压压力**/
-    @TableField("SystemHydraulicPressure")
-    private String SystemHydraulicPressure;
+    private String systemhydraulicpressure;
     /**系统吨位*/
-    @TableField("SystemTonnage")
-    private String SystemTonnage;
+    private String systemtonnage;
     /**主缸公称力**/
-    @TableField("MasterCylinder_NominalForce")
-    private String MasterCylinder_NominalForce;
+    private String mastercylinderNominalforce;
     /**主缸行程**/
-    @TableField("MasterCylinder_Stroke")
-    private String MasterCylinder_Stroke;
+    private String mastercylinderStroke;
     /**主缸回程力**/
-    @TableField("MasterCylinder_ReturnForce")
-    private String MasterCylinder_ReturnForce;
+    private String mastercylinderReturnforce;
     /**主缸加速速度**/
-    @TableField("MasterCylinder_AccelerationSpeed")
-    private String MasterCylinder_AccelerationSpeed;
+    private String mastercylinderAccelerationspeed;
     /**主缸加压速度**/
-    @TableField("MasterCylinder_CompressionSpeed")
-    private String MasterCylinder_CompressionSpeed;
+    private String mastercylinderCompressionspeed;
     /**主缸回程速度**/
-    @TableField("MasterCylinder_ReturnTripSpeed")
-    private String MasterCylinder_ReturnTripSpeed;
+    private String mastercylinderReturntripspeed;
     /**下缸公称力**/
-    @TableField("LowerCylinder_NominalForce")
-    private String LowerCylinder_NominalForce;
+    private String lowercylinderNominalforce;
     /**下缸行程**/
-    @TableField("LowerCylinder_Stroke")
-    private String LowerCylinder_Stroke;
+    private String lowercylinderStroke;
     /**下缸顶出速度**/
-    @TableField("LowerCylinder_EjectionSpeed")
-    private String LowerCylinder_EjectionSpeed;
+    private String lowercylinderEjectionspeed;
     /**下缸回程速度**/
-    @TableField("LowerCylinder_ReturnTripSpeed")
-    private String LowerCylinder_ReturnTripSpeed;
+    private String lowercylinderReturntripspeed;
     /**退料缸公称力**/
-    @TableField("ReturnCylinder_NominalForce")
-    private String ReturnCylinder_NominalForce;
+    private String returncylinderNominalforce;
     /**退料缸行程**/
-    @TableField("ReturnCylinder_Stroke")
-    private String ReturnCylinder_Stroke;
+    private String returncylinderStroke;
     /**退料缸顶出速度**/
-    @TableField("Cylinder_EjectionSpeed")
-    private String Cylinder_EjectionSpeed;
+    private String cylinderEjectionspeed;
     /**退料缸返回速度**/
-    @TableField("Cylinder_ReturnSpeed")
-    private String Cylinder_ReturnSpeed;
+    private String cylinderReturnspeed;
     /**最大开间**/
-    @TableField("Maximum_Bay")
-    private String Maximum_Bay;
+    private String maximumBay;
     /**最小开间**/
-    @TableField("Minimum_Bay")
-    private String Minimum_Bay;
+    private String minimumBay;
     /**工作台左右**/
-    @TableField("Workbench_LeftRight")
-    private String Workbench_LeftRight;
+    private String workbenchLeftright;
     /**工作台前后**/
-    @TableField("Workbench_UpDown")
-    private String Workbench_UpDown;
+    private String workbenchUpdown;
     /**主电机KW**/
-    @TableField("MainMotor_KW")
-    private String MainMotor_KW;
+    private String mainmotorKw;
     /**主电机X台**/
-    @TableField("MainMotor_X")
-    private String MainMotor_X; // MainMotor_X台
+    private String mainmotorX; // MainMotor_X台
     /**副电机KW**/
-    @TableField("AuxiliaryMotor_KW")
-    private String AuxiliaryMotor_KW;
+    private String auxiliarymotorKw;
     /**副电机X台**/
-    @TableField("AuxiliaryMotor_X")
-    private String AuxiliaryMotor_X; // AuxiliaryMotor_X台
+    private String auxiliarymotorX; // AuxiliaryMotor_X台
     /**主油泵**/
-    @TableField("MainOilPump")
-    private String MainOilPump;
+    private String mainoilpump;
     /**主油泵X台**/
-    @TableField("MainOilPump_X")
-    private String MainOilPump_X; // MainOilPump_X台
+    private String mainoilpumpX; // MainOilPump_X台
     /**副油泵**/
-    @TableField("AuxiliaryOilPump")
-    private String AuxiliaryOilPump;
+    private String auxiliaryoilpump;
     /**副油泵X台**/
-    @TableField("AuxiliaryOilPump_X")
-    private String AuxiliaryOilPump_X; // AuxiliaryOilPump_X台
+    private String auxiliaryoilpumpX; // AuxiliaryOilPump_X台
     /***出场日期*/
-    @TableField("DateofProduction")
-    private String DateofProduction;
+    private String dateofproduction;
     /**出厂编号**/
-    @TableField("FactoryNumber")
-    private String FactoryNumber;
+    private String factorynumber;
     /**系统传量程**/
-    @TableField("SystemTransmissionRange")
-    private String SystemTransmissionRange;
+    private String systemtransmissionrange;
     /**主缸传量程**/
-    @TableField("MasterCylinderSystemTransmissionRange")
-    private String MasterCylinderSystemTransmissionRange;
+    private String mastercylindersystemtransmissionrange;
     /**计数器显示**/
-    @TableField("CounterDisplay")
-    private String CounterDisplay;
+    private String counterdisplay;
     /**主回提前停速度**/
-    @TableField("MainGyrus_StopSpeed")
-    private String MainGyrus_StopSpeed;
+    private String maingyrusStopspeed;
     /**主缸位置显示值**/
-    @TableField("MasterCylinder_PositionValue")
-    private String MasterCylinder_PositionValue;
+    private String mastercylinderPositionvalue;
 
     /**主缸吨位显示值**/
-    @TableField("MasterCylinder_TonnageValue")
-    private String MasterCylinder_TonnageValue;
+    private String mastercylinderTonnagevalue;
     /**下缸位置显示值**/
-    @TableField("LowerCylinder_PositionValue")
-    private String LowerCylinder_PositionValue;
+    private String lowercylinderPositionvalue;
     /**下缸吨位显示值**/
-    @TableField("LowerCylinder_TonnageValue")
-    private String LowerCylinder_TonnageValue;
+    private String lowercylinderTonnagevalue;
     /**退料缸吨位显示值**/
-    @TableField("ReturnCylinder_TonnageValue")
-    private String ReturnCylinder_TonnageValue;
+    private String returncylinderTonnagevalue;
     /**伺服1压力**/
-    @TableField("Servo1Pressure")
-    private String Servo1Pressure;
+    private String servo1pressure;
     /**伺服1流量**/
-    @TableField("Servo1Flow")
-    private String Servo1Flow;
+    private String servo1flow;
     /**伺服2压力**/
-    @TableField("Servo2Pressure")
-    private String Servo2Pressure;
+    private String servo2pressure;
     /**伺服2流量**/
-    @TableField("Servo2Flow")
-    private String Servo2Flow;
+    private String servo2flow;
     /**伺服3压力**/
-    @TableField("Servo3Pressure")
-    private String Servo3Pressure;
+    private String servo3pressure;
     /**伺服3流量**/
-    @TableField("Servo3Flow")
-    private String Servo3Flow;
+    private String servo3flow;
 
     /**采集时间**/
     @ApiModelProperty(value = "采集时间")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss:SSS")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss:SSS")
-    private Date create_time;
+    /*@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss:SSS")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss:SSS")*/
+    @JsonFormat(timezone = "GMT+8", pattern = "HH:mm:ss")
+    @DateTimeFormat(pattern = "HH:mm:ss")
+    private Date createTime;
 
 }

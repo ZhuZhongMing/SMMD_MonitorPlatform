@@ -1,9 +1,7 @@
 package org.jeecg.modules.listener;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.jeecg.modules.system.entity.CNCModel;
 import org.jeecg.modules.system.service.ICNCModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
-import static org.jeecg.modules.listener.utils.LDMessageDispose.mqttMessageDispose;
+import static org.jeecg.modules.listener.utils.CNCMessageDispose.mqttMessageDispose;
 import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.getMQTTConnect;
 import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.reconnectionMQTT;
 

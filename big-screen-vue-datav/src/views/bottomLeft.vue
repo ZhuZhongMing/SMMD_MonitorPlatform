@@ -6,11 +6,11 @@
           <icon name="chart-bar"></icon>
         </span>
         <div class="d-flex">
-          <span class="fs-xl text mx-2">数据统计图</span>
+          <span class="fs-xl text mx-2">设备</span>
         </div>
       </div>
       <div>
-        <bottomLeftChart />
+        <bottomLeftChart ref="bottomLeftChart" />
       </div>
     </div>
   </div>
@@ -20,13 +20,21 @@
 import bottomLeftChart from "@/components/echart/bottom/bottomLeftChart";
 export default {
   data() {
-    return {};
+    return {
+      pressModel: {}
+    };
   },
   components: {
     bottomLeftChart
   },
   mounted() {},
-  methods: {}
+  methods: {
+    getPressModel3(item) {
+      this.pressModel = item
+      this.$refs.bottomLeftChart.getDataOfLeftChart(this.pressModel)
+      // console.log("item : " + JSON.stringify(this.pressModel))
+    }
+  }
 };
 </script>
 

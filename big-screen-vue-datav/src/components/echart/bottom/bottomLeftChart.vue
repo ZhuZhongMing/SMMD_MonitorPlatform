@@ -6,89 +6,68 @@
 
 <script>
 import echartMixins from "@/utils/resizeMixins";
+import { getRequest } from '@/config/config'
 export default {
   data() {
     return {
-      chart: null
+      chart: null,
+      pressModel: {},
+      pressure: {
+        pressure1: [],
+        pressure2: [],
+        pressure3: [],
+        datetime: []
+      },
+      url: {
+        queryTOP5ByEquipmentId: '/system/qf/queryTOP5ByEquipmentId'
+      }
     };
   },
   mixins: [echartMixins],
   mounted() {
-    this.draw();
+    // this.draw();
   },
   methods: {
+    /*获取传递来的数据*/
+    getDataOfLeftChart(item) {
+      this.pressModel = item
+      // console.log('chart :' + JSON.stringify(this.pressModel))
+      this.queryTOP5ByEquipmentId()
+    },
+    queryTOP5ByEquipmentId() {
+      var param = { equipmentsn: this.pressModel.equipmentsn }
+      getRequest(this.url.queryTOP5ByEquipmentId, param).then(res => {
+        this.pressure.pressure1.splice(0)
+        this.pressure.pressure2.splice(0)
+        this.pressure.pressure3.splice(0)
+        this.pressure.datetime.splice(0)
+        for (let i = 0; i < res.data.result.length; i++) {
+          this.pressure.pressure1.push(parseInt(res.data.result[i].systempressurevalue)) // 系统压力
+          this.pressure.pressure2.push(parseInt(res.data.result[i].mastercylinderPressurevalue)) // 主缸压力
+          this.pressure.pressure3.push(parseInt(res.data.result[i].systemhydraulicpressure)) // 液压压力
+          this.pressure.datetime.push(res.data.result[i].createTime)
+        }
+        this.draw()
+      }).catch(exc => {
+        console.log('查询压力变化发生异常！异常信息：' + exc)
+      })
+    },
     draw() {
       // 基于准备好的dom，初始化echarts实例
       this.chart = this.$echarts.init(document.getElementById("bottomLeftChart"));
       //  ----------------------------------------------------------------
-      let category = [
+      /*let category = [
         "市区",
         "万州",
         "江北",
         "南岸",
-        "北碚",
-        "綦南",
-        "长寿",
-        "永川",
-        "璧山",
-        "江津",
-        "城口",
-        "大足",
-        "垫江",
-        "丰都",
-        "奉节",
-        "合川",
-        "江津区",
-        "开州",
-        "南川",
-        "彭水",
-        "黔江",
-        "石柱",
-        "铜梁",
-        "潼南",
-        "巫山",
-        "巫溪",
-        "武隆",
-        "秀山",
-        "酉阳",
-        "云阳",
-        "忠县",
-        "川东",
-        "检修"
+        "北碚"
       ];
       let lineData = [
         18092,
         20728,
         24045,
         28348,
-        32808,
-        36097,
-        39867,
-        44715,
-        48444,
-        50415,
-        56061,
-        62677,
-        59521,
-        67560,
-        18092,
-        20728,
-        24045,
-        28348,
-        32808,
-        36097,
-        39867,
-        44715,
-        48444,
-        50415,
-        36097,
-        39867,
-        44715,
-        48444,
-        50415,
-        50061,
-        32677,
-        49521,
         32808
       ];
       let barData = [
@@ -96,41 +75,13 @@ export default {
         5000,
         5500,
         6500,
-        7500,
-        8500,
-        9900,
-        12500,
-        14000,
-        21500,
-        23200,
-        24450,
-        25250,
-        33300,
-        4600,
-        5000,
-        5500,
-        6500,
-        7500,
-        8500,
-        9900,
-        22500,
-        14000,
-        21500,
-        8500,
-        9900,
-        12500,
-        14000,
-        21500,
-        23200,
-        24450,
-        25250,
         7500
       ];
       let rateData = [];
       for (let i = 0; i < 33; i++) {
         let rate = barData[i] / lineData[i];
         rateData[i] = rate.toFixed(2);
-      }
+      }*/
 
       let option = {
         title: {
@@ -155,7 +106,7 @@ export default {
           }
         },
         legend: {
-          data: ["已贯通", "计划贯通", "贯通率"],
+          data: ["系统压力", "主缸压力", "液压压力"], //data: ["已贯通", "计划贯通", "贯通率"],
           textStyle: {
             color: "#B4B4B4"
           },
@@ -163,11 +114,11 @@ export default {
         },
         grid: {
           x: "8%",
-          width: "88%",
+          width: "84%",
           y: "4%"
         },
         xAxis: {
-          data: category,
+          data: this.pressure.datetime,
           axisLine: {
             lineStyle: {
               color: "#B4B4B4"
@@ -204,25 +155,24 @@ export default {
         ],
         series: [
           {
-            name: "贯通率",
+            name: "系统压力",
             type: "line",
             smooth: true,
             showAllSymbol: true,
             symbol: "emptyCircle",
             symbolSize: 8,
-            yAxisIndex: 1,
+            yAxisIndex: 0, // 1
             itemStyle: {
               normal: {
                 color: "#F02FC2"
               }
             },
-            data: rateData
+            data: this.pressure.pressure1
           },
-
           {
-            name: "已贯通",
+            name: "主缸压力",
             type: "bar",
-            barWidth: 10,
+            barWidth: 40,
             itemStyle: {
               normal: {
                 barBorderRadius: 5,
@@ -232,14 +182,13 @@ export default {
                 ])
               }
             },
-            data: barData
+            data: this.pressure.pressure2
           },
-
           {
-            name: "计划贯通",
+            name: "液压压力",
             type: "bar",
             barGap: "-100%",
-            barWidth: 10,
+            barWidth: 40,
             itemStyle: {
               normal: {
                 barBorderRadius: 5,
@@ -252,7 +201,7 @@ export default {
             },
             z: -12,
 
-            data: lineData
+            data: this.pressure.pressure3
           }
         ]
       };

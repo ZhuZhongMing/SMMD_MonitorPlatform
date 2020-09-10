@@ -19,7 +19,7 @@ import java.util.Map;
  * date 2020-08-24
  */
 @Slf4j
-public class LDMessageDispose {
+public class CNCMessageDispose {
 
     public static CNCModel mqttMessageDispose(MqttMessage message){
         String theMsg = MessageFormat.format("{0}", new String(message.getPayload()));

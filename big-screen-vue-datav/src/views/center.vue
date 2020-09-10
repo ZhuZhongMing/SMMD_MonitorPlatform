@@ -44,19 +44,6 @@ export default {
       titleItem: [],
       defaultTitleItem: [
         {
-          title: "QF_CNC_02",
-          info: {},
-          number: {
-            number: ['离线'],
-            toFixed: 1,
-            content: "{nt}",
-            style: {
-              fontSize: 26,
-              fill: '#858f91'
-            }
-          }
-        },
-        {
           title: "QF_SMART_03",
           info: {},
           number: {
@@ -81,6 +68,19 @@ export default {
               fill: '#858f91'
             }
           }
+        },
+        {
+          title: "QF_SIEMENS808D_002",
+          info: {},
+          number: {
+            number: ['离线'],
+            toFixed: 1,
+            content: "{nt}",
+            style: {
+              fontSize: 26,
+              fill: '#858f91'
+            }
+          }
         }
       ],
       ranking: {
@@ -90,15 +90,15 @@ export default {
       },
       defaultData: [
         {
-          name: "QF_CNC_02",
-          value: 0
-        },
-        {
           name: "QF_SMART_03",
           value: 0
         },
         {
           name: "QF_SMART_04",
+          value: 0
+        },
+        {
+          name: "QF_SIEMENS808D_002",
           value: 0
         }
       ],
@@ -161,7 +161,7 @@ export default {
       getRequest(this.url.getEquipmentListByCompany, param).then(res => {
         this.equipmentList = res.data.result
         this.sortEquipmentDevCount () // 查询排行
-        this.currentEquipment = this.equipmentList[2] //默认查看钱富西门子2号设备
+        this.currentEquipment = this.equipmentList[1] //默认查看钱富西门子2号设备
         this.$emit("getEquipment",this.currentEquipment)
         this.titleItem.splice(0)
         for (let i = 0; i < this.equipmentList.length; i++) {
@@ -171,7 +171,10 @@ export default {
             number: {
               number: ['在线'],
               toFixed: 1,
-              content: "{nt}"
+              content: "{nt}",
+              style: {
+                fontSize: 26,
+              }
             }
           })
         }
@@ -197,7 +200,7 @@ export default {
           if (res.data.result) {
             data.push({
               name: this.equipmentList[i].equipmentName,
-              value: parseInt(res.data.result.counterDisplay)
+              value: parseInt(res.data.result.counterdisplay)
             })
           }  else {
             data.push({
