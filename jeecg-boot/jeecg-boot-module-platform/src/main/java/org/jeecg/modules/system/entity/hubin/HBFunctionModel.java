@@ -62,6 +62,9 @@ public class HBFunctionModel implements Serializable {
     /**功能_电晕风机（不使用）**/
     @TableField("Function_CoronaFan_NotUsed")
     private Integer Function_CoronaFan_NotUsed;
+    /**功能_电晕报警检测**/
+    @TableField("Function_CoronaAlarm")
+    private Integer Function_CoronaAlarm;
 
     /**采集时间**/
     @ApiModelProperty(value = "采集时间")

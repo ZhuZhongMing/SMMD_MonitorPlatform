@@ -207,4 +207,8 @@ public class HBAlarmModel implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss:SSS")
     private Date create_time;
 
+    /**报警——UV系统报警**/
+    @TableField("Alarm_UVSystemAlarm")
+    private Integer Alarm_UVSystemAlarm;
+
 }

@@ -42,6 +42,9 @@ public class HBMenuModel implements Serializable {
     /**菜单_设定值**/
     @TableField("Menu_Setting")
     private Integer Menu_Setting;
+    /**总米数**/
+    @TableField("Menu_TotalMeters")
+    private Integer Menu_TotalMeters;
 
     /**采集时间**/
     @ApiModelProperty(value = "采集时间")
