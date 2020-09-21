@@ -39,12 +39,12 @@
 // import centerChart from "@/components/echart/center/centerChartRate";
 import { getRequest } from '@/config/config'
 export default {
-  data() {
+  data: function () {
     return {
       titleItem: [],
       defaultTitleItem: [
         {
-          title: "QF_SMART_03",
+          title: "液压设备3",
           info: {},
           number: {
             number: ['离线'],
@@ -57,7 +57,7 @@ export default {
           }
         },
         {
-          title: "QF_SMART_04",
+          title: "液压设备4",
           info: {},
           number: {
             number: ['离线'],
@@ -70,7 +70,7 @@ export default {
           }
         },
         {
-          title: "QF_SIEMENS808D_002",
+          title: "磨洗设备2",
           info: {},
           number: {
             number: ['离线'],
@@ -90,15 +90,15 @@ export default {
       },
       defaultData: [
         {
-          name: "QF_SMART_03",
+          name: "液压设备3",
           value: 0
         },
         {
-          name: "QF_SMART_04",
+          name: "液压设备4",
           value: 0
         },
         {
-          name: "QF_SIEMENS808D_002",
+          name: "磨洗设备2",
           value: 0
         }
       ],
@@ -141,10 +141,11 @@ export default {
       ],
       equipmentList: [],
       /*当前设备信息*/
-      currentEquipment:{},
+      currentEquipment: {},
       url: {
         getEquipmentListByCompany: '/system/mpiEquipment/getEquipmentListByCompany',
-        queryByEquipmentId: '/system/qf/queryByEquipmentId'
+        queryByEquipmentId: '/system/qf/queryByEquipmentId',
+        getCnnModelValue: '/system/cnc/queryByEquipmentId'
       }
     };
   },
@@ -193,29 +194,61 @@ export default {
         data.push(this.defaultData[i])
       }*/
       for (let i = 0; i < this.equipmentList.length; i++) {
-        var param = {
-          equipmentsn : this.equipmentList[i].id
+        if(this.equipmentList[i].id == 'QF_SIEMENS808D_001') {
+          // cnc设备
+          var paramCNC = {
+            cncsn : this.equipmentList[i].id
+          }
+          // console.log("cncsn : " + JSON.stringify(paramCNC))
+          getRequest(this.url.getCnnModelValue, paramCNC).then(res => {
+            // console.log("data : " + res.data.result)
+            if (res.data.result) {
+              data.push({
+                name: this.equipmentList[i].equipmentName,
+                value: parseInt(res.data.result.count)
+              })
+            }  else {
+              data.push({
+                name: this.equipmentList[i].equipmentName,
+                value: parseInt(0)
+              })
+            }
+            this.ranking = {
+              data: data,
+              waitTime: 4000,
+              unit: "件"
+            }
+            this.$emit("getCount", data) // 传递给父组件
+          }).catch(exc => {
+            console.log('CNC设备生产数量发生异常！异常信息：' + exc)
+          })
+        } else {
+          var param = {
+            equipmentsn : this.equipmentList[i].id
+          }
+          getRequest(this.url.queryByEquipmentId, param).then(res => {
+            if (res.data.result) {
+              data.push({
+                name: this.equipmentList[i].equipmentName,
+                value: parseInt(res.data.result.counterdisplay)
+              })
+            }  else {
+              data.push({
+                name: this.equipmentList[i].equipmentName,
+                value: parseInt(0)
+              })
+            }
+            this.ranking = {
+              data: data,
+              waitTime: 4000,
+              unit: "件"
+            }
+            this.$emit("getCount", data) // 传递给父组件
+          }).catch(exc => {
+            console.log('西门子设备生产数量发生异常！异常信息：' + exc)
+          })
         }
-        getRequest(this.url.queryByEquipmentId, param).then(res => {
-          if (res.data.result) {
-            data.push({
-              name: this.equipmentList[i].equipmentName,
-              value: parseInt(res.data.result.counterdisplay)
-            })
-          }  else {
-            data.push({
-              name: this.equipmentList[i].equipmentName,
-              value: parseInt(0)
-            })
-          }
-          this.ranking = {
-            data: data,
-            waitTime: 4000,
-            unit: "件"
-          }
-        }).catch(exc => {
-          console.log('设备生产数量发生异常！异常信息：' + exc)
-        })
+
       }
       //console.log("data : " + JSON.stringify(data))
       /*this.ranking = {

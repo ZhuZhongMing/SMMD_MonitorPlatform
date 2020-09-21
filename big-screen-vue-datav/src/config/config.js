@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const host = 'http://192.169.1.190:8090/jeecg-boot'
+const host = 'http://192.168.31.218:8090/jeecg-boot'
 
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 

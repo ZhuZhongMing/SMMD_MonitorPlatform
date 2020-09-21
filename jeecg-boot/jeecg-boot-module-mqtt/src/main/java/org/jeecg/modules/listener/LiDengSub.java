@@ -22,16 +22,16 @@ import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.reconnectionMQ
 @Slf4j
 @Component
 public class LiDengSub implements MqttCallback {
-    @Value("${mqtt.host}")
-    private String host;
-    @Value("${mqtt.name}")
-    private String name;
-    @Value("${mqtt.password}")
-    private String password;
-    @Value("${mqtt.topic.lideng}")
-    private String[] topic;
-    @Value("${mqtt.clientId.lideng}")
-    private String clientId;
+    //@Value("${mqtt.host}")
+    private String host = "tcp://47.105.51.27:1883";
+    //@Value("${mqtt.name}")
+    private String name = "admin";
+    //@Value("${mqtt.password}")
+    private String password = "public";
+    //@Value("${mqtt.topic.lideng}")
+    private String[] topic = {"/lideng/cnc/fanuc/001", "/lideng/cnc/fanuc/002", "/lideng/cnc/fanuc/003"};
+    //@Value("${mqtt.clientId.lideng}")
+    private String clientId = "lideng_consumer";
     /**mqtt连接**/
     private MqttClient sampleClient;
 

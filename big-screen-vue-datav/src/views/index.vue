@@ -51,7 +51,7 @@
               style="width: 6.25rem; background-color: #0f1325; text-align: right;"
             >
               <span class="react-after"></span>
-              <span class="text">2020年03月16日 周一 12:00</span>
+              <span class="text" v-text="nowTime"></span>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
             <!-- 中间 -->
             <div>
               <dv-border-box-12>
-                <center @getEquipment="getEquipment" />
+                <center @getEquipment="getEquipment" @getCount="getCount" />
               </dv-border-box-12>
             </div>
             <!-- 中间 -->
@@ -80,7 +80,7 @@
             </div>
 
             <div>
-              <centerRight2 />
+              <centerRight2 ref="centerRight2" />
             </div>
             <div>
               <dv-border-box-13>
@@ -95,7 +95,7 @@
               <bottomLeft ref="bottomLeft" />
             </dv-border-box-13>
             <dv-border-box-12>
-              <bottomRight />
+              <bottomRight ref="bottomRight" />
             </dv-border-box-12>
           </div>
         </div>
@@ -116,6 +116,7 @@ import { getRequest } from '@/config/config'
 export default {
   data() {
     return {
+      nowTime: '',
       loading: true,
       equipment: {},
       /*当前数据*/
@@ -136,12 +137,20 @@ export default {
   },
   mounted() {
     this.cancelLoading();
+    setInterval(() =>{
+      this.getNowTime()
+    },1000)
   },
   methods: {
     cancelLoading() {
       setTimeout(() => {
         this.loading = false;
       }, 500);
+    },
+    /*获取数量*/
+    getCount(data) {
+      this.$refs.centerRight2.getData(data)
+      this.$refs.bottomRight.getDataOfBottom(data)
     },
     /*获取当前设备信息*/
     getEquipment(item) {
@@ -160,6 +169,35 @@ export default {
       }).catch(exc => {
         console.log('设备数据发生异常！异常信息：' + exc)
       })
+    },
+    getNowTime() {
+      var str; //colorfoot
+      var objD = new Date()
+      var yy = objD.getFullYear();
+      var MM = objD.getMonth()+1;
+      if(MM<10) MM = '0' + MM;
+      var dd = objD.getDate();
+      if(dd<10) dd = '0' + dd;
+      var hh = objD.getHours();
+      if(hh<10) hh = '0' + hh;
+      var mm = objD.getMinutes();
+      if(mm<10) mm = '0' + mm;
+      var ss = objD.getSeconds();
+      if(ss<10) ss = '0' + ss;
+      var ww = objD.getDay();
+      /*if  ( ww==0 )  colorhead="<font color=\"#ffffff\">";
+      if  ( ww > 0 && ww < 6 )  colorhead="<font color=\"#ffffff\">";
+      if  ( ww==6 )  colorhead="<font color=\"#ffffff\">";*/
+      if  (ww==0)  ww="星期日";
+      if  (ww==1)  ww="星期一";
+      if  (ww==2)  ww="星期二";
+      if  (ww==3)  ww="星期三";
+      if  (ww==4)  ww="星期四";
+      if  (ww==5)  ww="星期五";
+      if  (ww==6)  ww="星期六";
+      /*colorfoot="</font>"*/
+      str = yy + "-" + MM + "-" + dd + " " + hh + ":" + mm + ":" + ss + "  " + ww /* + colorfoot*/;
+      this.nowTime = str
     }
   }
 };

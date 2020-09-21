@@ -6,30 +6,75 @@
           <icon name="chart-area"></icon>
         </span>
         <div class="d-flex">
-          <span class="fs-xl text mx-2">工单修复以及满意度统计图</span>
+          <span class="fs-xl text mx-2">设备生产数量对比</span>
           <div class="decoration2">
-            <dv-decoration-2 :reverse="true" style="width:5px;height:480px;" />
+            <dv-decoration-2 :reverse="true" style="width:5px;height:380px;" />
           </div>
         </div>
       </div>
       <div>
-        <bottomRightChart />
+        <!--<bottomRightChart />-->
+        <dv-conical-column-chart :config="config" style="width:100%; height:5.7rem;" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import bottomRightChart from "@/components/echart/bottom/bottomRightChart";
+//import bottomRightChart from "@/components/echart/bottom/bottomRightChart";
 export default {
   data() {
-    return {};
+    return {
+      config: {
+        data: [
+          {
+            name: '周口',
+            value: 55
+          },
+          {
+            name: '南阳',
+            value: 120
+          },
+          {
+            name: '西峡',
+            value: 71
+          },
+          {
+            name: '驻马店',
+            value: 66
+          },
+          {
+            name: '新乡',
+            value: 80
+          },
+          {
+            name: '信阳',
+            value: 35
+          },
+          {
+            name: '漯河',
+            value: 15
+          }
+        ],
+        img: [],
+        showValue: true
+      }
+    };
   },
   components: {
-    bottomRightChart
+    //bottomRightChart
   },
   mounted() {},
-  methods: {}
+  methods: {
+    getDataOfBottom(data) {
+      //console.log(typeof data[0].value)
+      this.config = {
+        data: data,
+        img: [],
+        showValue: true
+      }
+    }
+  }
 };
 </script>
 

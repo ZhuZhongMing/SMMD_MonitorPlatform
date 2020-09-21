@@ -41,7 +41,12 @@ public class CNCModelController extends JeecgController<CNCModel, ICNCModelServi
         QueryWrapper<CNCModel> queryWrapper =  new QueryWrapper<>();
         String lastSql = "where id in (select max(id) from cnc_model where cncsn = '" + cncModel.getCncsn() +"')";
         queryWrapper.last(lastSql);
-        CNCModel model = icncModelService.list(queryWrapper).get(0);
+        CNCModel model = null;
+        try {
+            model = icncModelService.list(queryWrapper).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            log.info("下标越界");
+        }
         return Result.ok(model);
     }
 

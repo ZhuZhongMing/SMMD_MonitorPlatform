@@ -27,7 +27,11 @@ public class MQTTConnentionUtil {
      * @return MQTT连接
      */
     public static MqttClient getMQTTConnect(String host, String clientId, String name, String password, String[] topic) {
-
+        log.info("host:" + host);
+        log.info("clientId:" + clientId);
+        log.info("name:" + name);
+        log.info("password:" + password);
+        log.info("topic:" + topic);
         MemoryPersistence persistence = new MemoryPersistence();
         MqttClient sampleClient = null;
         try{
@@ -73,7 +77,10 @@ public class MQTTConnentionUtil {
                 sub.run();
                 log.info("=========================================================》【MQTT】【" + clientId + "】重新连接成功");
                 break;
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
+                log.error("【MQTT】【" + clientId + "】重连时发生线程中断异常！异常信息：" + e);
+                Thread.interrupted(); // 重置线程中断状态
+            }catch (Exception e) {
                 e.printStackTrace();
                 log.error("【MQTT】【" + clientId + "】重连时发生异常！异常信息：" + e);
             }

@@ -5,19 +5,21 @@
         <span style="color:#5cd9e8">
           <icon name="align-left"></icon>
         </span>
-        <span class="fs-xl text mx-2">产品销售渠道分析</span>
+        <span class="fs-xl text mx-2">系统压力</span>
+        <dv-decoration-1 style="width:1.25rem;height:.25rem; position:relative;top:-.0375rem;" />
       </div>
       <div class="d-flex jc-center body-box" style=" margin-top: 0;">
-        <dv-capsule-chart :config="config" style="width: 100%;height:2rem" />
+        <!--<dv-capsule-chart :config="config" style="width: 100%;height:2rem" />-->
+        <!--<dv-active-ring-chart :config="config" style="width:100%;height:4.5rem;font-size: 10px;" />-->
         <!-- ---------------------------------------- -->
-        <centreRight2Chart1></centreRight2Chart1>
+        <centreRight2Chart></centreRight2Chart>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import centreRight2Chart1 from "@/components/echart/centreRight2/centreRight2Chart1";
+import centreRight2Chart from "@/components/echart/centreRight2/centreRight2Chart";
 
 export default {
   data() {
@@ -48,9 +50,17 @@ export default {
       }
     };
   },
-  components: { centreRight2Chart1 },
+  components: {
+    centreRight2Chart
+  },
   mounted() {},
-  methods: {}
+  methods: {
+    getData(data) {
+      this.config = {
+        data: data
+      }
+    }
+  }
 };
 </script>
 

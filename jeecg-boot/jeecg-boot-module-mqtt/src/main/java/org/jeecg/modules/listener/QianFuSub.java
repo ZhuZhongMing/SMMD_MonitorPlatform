@@ -29,16 +29,16 @@ import static org.jeecg.modules.listener.utils.QFMessageDispose.QFMessageDispose
 @Slf4j
 @Component
 public class QianFuSub implements MqttCallback {
-    @Value("${mqtt.host}")
-    private String host;
-    @Value("${mqtt.name}")
-    private String name;
-    @Value("${mqtt.password}")
-    private String password;
-    @Value("${mqtt.topic.qianfu}")
-    private String[] topic;
-    @Value("${mqtt.clientId.qianfu}")
-    private String clientId;
+    //@Value("${mqtt.host}")
+    private String host = "tcp://47.105.51.27:1883";
+    //@Value("${mqtt.name}")
+    private String name = "admin";
+    //@Value("${mqtt.password}")
+    private String password = "public";
+    //@Value("${mqtt.topic.qianfu}")
+    private String[] topic = {"/qianfu/device/press1/message", "/qianfu/device/press2/message", "/qianfu/cnc/siemens828d/001"};
+    //@Value("${mqtt.clientId.qianfu}")
+    private String clientId = "qianfu_consumer";
     /**mqtt连接**/
     private MqttClient sampleClient;
     /*采集时间*/

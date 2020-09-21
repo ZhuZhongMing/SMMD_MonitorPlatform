@@ -29,16 +29,16 @@ import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.reconnectionMQ
 @Slf4j
 @Component
 public class HuBinSub implements MqttCallback {
-    @Value("${mqtt.host}")
-    private String host;
-    @Value("${mqtt.name}")
-    private String name;
-    @Value("${mqtt.password}")
-    private String password;
+    //@Value("${mqtt.host}")
+    private String host = "tcp://47.105.51.27:1883";
+    //@Value("${mqtt.name}")
+    private String name = "admin";
+    //@Value("${mqtt.password}")
+    private String password = "public";
     @Value("${mqtt.topic.hubin}")
-    private String[] topic;
-    @Value("${mqtt.clientId.hubin}")
-    private String clientId;
+    private String[] topic = {"/sys/hubin/message"};
+    //@Value("${mqtt.clientId.hubin}")
+    private String clientId = "hubin_consumer";
     /**mqtt连接**/
     private MqttClient sampleClient;
     /*采集时间*/
@@ -89,67 +89,67 @@ public class HuBinSub implements MqttCallback {
             //String theMsg = MessageFormat.format("{0}", new String(message.getPayload()));
             String pagLoad = new String(message.getPayload());
             JSONObject jsonObject = JSONObject.parseObject(pagLoad);
-            JSONArray devList = jsonObject.getJSONArray("devList"); // 改动
-            // JSONObject varList = jsonObject.getJSONObject("varList");
-            JSONObject obj = JSONObject.parseObject(devList.get(0).toString()); // 改动
-            JSONArray varList = obj.getJSONArray("varList"); // 改动
-            System.out.println("varList : " + varList );
+            //JSONArray devList = jsonObject.getJSONArray("devList"); // 改动
+            JSONObject varList = jsonObject.getJSONObject("varList");
+            //JSONObject obj = JSONObject.parseObject(devList.get(0).toString()); // 改动
+            //JSONArray varList = obj.getJSONArray("varList"); // 改动
+            //System.out.println("varList : " + varList );
             /*Object varList = jsonObject.get("varList");*/
             if (null !=varList) {
                 if (varList.toString().contains("Tow_Tension1_1")) {
-                    /*if (null == create_time) {
+                    if (null == create_time) {
                         create_time = new Date();
-                    }*/
-                    //HBTowModel model =  JSONObject.toJavaObject(varList, HBTowModel.class);
-                    HBTowModel model =  MessageToTowModel(varList);
-                    //model.setCreate_time(create_time);
+                    }
+                    HBTowModel model =  JSONObject.toJavaObject(varList, HBTowModel.class);
+                    //HBTowModel model =  MessageToTowModel(varList);
+                    model.setCreate_time(create_time);
                     ihbTowModelService.save(model);
                     System.out.println("----------------> hubin第一组 : " + model );
                 } else if (varList.toString().contains("Menu_ToothNumber")) {
-                    /*if (null == create_time) {
+                    if (null == create_time) {
                         create_time = new Date();
-                    }*/
-                    HBMenuModel model = MessageToHBMenuModel(varList);
-                    //HBMenuModel model = JSONObject.toJavaObject(varList, HBMenuModel.class);
-                    //model.setCreate_time(create_time);
+                    }
+                    //HBMenuModel model = MessageToHBMenuModel(varList);
+                    HBMenuModel model = JSONObject.toJavaObject(varList, HBMenuModel.class);
+                    model.setCreate_time(create_time);
                     ihbMenuModelService.save(model);
                     System.out.println("----------------> hubin第二组 : " +model );
                 } else if (varList.toString().contains("Function_ReverseValue")) {
-                    /*if (null == create_time) {
+                    if (null == create_time) {
                         create_time = new Date();
-                    }*/
-                    //HBFunctionModel model = JSONObject.toJavaObject(varList, HBFunctionModel.class);
-                    HBFunctionModel model = MessageToHBFunctionModel(varList);
-                    //model.setCreate_time(create_time);
+                    }
+                    HBFunctionModel model = JSONObject.toJavaObject(varList, HBFunctionModel.class);
+                    //HBFunctionModel model = MessageToHBFunctionModel(varList);
+                    model.setCreate_time(create_time);
                     ihbFunctionModelService.save(model);
                     System.out.println("----------------> hubin第三组 : " + model );
                 } else if (varList.toString().contains("Correct_1Color")) {
-                    /*if (null == create_time) {
+                    if (null == create_time) {
                         create_time = new Date();
-                    }*/
-                    //HBCorrenctModel model = JSONObject.toJavaObject(varList, HBCorrenctModel.class);
-                    HBCorrenctModel model = MessageToHBCorrenctModel(varList);
-                    //model.setCreate_time(create_time);
+                    }
+                    HBCorrenctModel model = JSONObject.toJavaObject(varList, HBCorrenctModel.class);
+                    //HBCorrenctModel model = MessageToHBCorrenctModel(varList);
+                    model.setCreate_time(create_time);
                     ihbCorrenctModelService.save(model);
                     System.out.println("----------------> hubin第四组 : " + model );
                 } else if (varList.toString().contains("Task_MeterNumber_CuttentValue")) {
-                    /*if (null == create_time) {
+                    if (null == create_time) {
                         create_time = new Date();
-                    }*/
-                    //HBTaskModel model = JSONObject.toJavaObject(varList, HBTaskModel.class);
-                    HBTaskModel model = MessageToHBTaskModel(varList);
-                    //model.setCreate_time(create_time);
+                    }
+                    HBTaskModel model = JSONObject.toJavaObject(varList, HBTaskModel.class);
+                    //HBTaskModel model = MessageToHBTaskModel(varList);
+                    model.setCreate_time(create_time);
                     ihbTaskModelService.save(model);
                     System.out.println("----------------> hubin第五组 : " + model );
                 } else if (varList.toString().contains("Alarm_UnwindingLnflationNotOpen")) {
-                    /*if (null == create_time) {
+                    if (null == create_time) {
                         create_time = new Date();
-                    }*/
-                    //HBAlarmModel model = JSONObject.toJavaObject(varList, HBAlarmModel.class);
-                    HBAlarmModel model = MessageToHBAlarmModel(varList);
-                    //model.setCreate_time(create_time);
+                    }
+                    HBAlarmModel model = JSONObject.toJavaObject(varList, HBAlarmModel.class);
+                    //HBAlarmModel model = MessageToHBAlarmModel(varList);
+                    model.setCreate_time(create_time);
                     ihbAlarmModelService.save(model);
-                    //create_time = null; // 清除
+                    create_time = null; // 清除
                     System.out.println("----------------> hubin第六组 : " + model );
                 }
             }
