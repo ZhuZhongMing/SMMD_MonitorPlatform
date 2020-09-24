@@ -1,12 +1,16 @@
 package org.jeecg.modules.listener;
 
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.jeecg.modules.listener.subInterface.SubMqttCallBack;
 import org.jeecg.modules.system.entity.CNCModel;
 import org.jeecg.modules.system.service.ICNCModelService;
+import org.jeecg.modules.system.service.ld.ILDCNCModelService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
 
 import static org.jeecg.modules.listener.utils.CNCMessageDispose.mqttMessageDispose;
@@ -21,7 +25,7 @@ import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.reconnectionMQ
  */
 @Slf4j
 @Component
-public class LiDengSub implements MqttCallback {
+public class LiDengSub03 implements SubMqttCallBack {
     //@Value("${mqtt.host}")
     private String host = "tcp://47.105.51.27:1883";
     //@Value("${mqtt.name}")
@@ -29,19 +33,23 @@ public class LiDengSub implements MqttCallback {
     //@Value("${mqtt.password}")
     private String password = "public";
     //@Value("${mqtt.topic.lideng}")
-    private String[] topic = {"/lideng/cnc/fanuc/001", "/lideng/cnc/fanuc/002", "/lideng/cnc/fanuc/003"};
+    //private String[] topic = {"/lideng/cnc/fanuc/001", "/lideng/cnc/fanuc/002", "/lideng/cnc/fanuc/003"};
+    private String topic = "/lideng/cnc/fanuc/003";
     //@Value("${mqtt.clientId.lideng}")
-    private String clientId = "lideng_consumer";
+    private String clientId = "lideng_consumer003";
     /**mqtt连接**/
     private MqttClient sampleClient;
 
     @Autowired
     private ICNCModelService icncModelService;
 
+    @Autowired
+    private ILDCNCModelService ildcncModelService;
+
     // 连接丢失
     @Override
     public void connectionLost(Throwable throwable) {
-        reconnectionMQTT(sampleClient,clientId);
+        reconnectionMQTT(sampleClient,clientId, this);
         /*log.warn("【MQTT】连接断开，30S后重新尝试重连......");
         while (true) {
             try {
@@ -50,9 +58,12 @@ public class LiDengSub implements MqttCallback {
                 this.run();
                 log.info("=========================================================》【MQTT】重新连接成功");
                 break;
+            } catch (InterruptedException e) {
+                Thread.interrupted(); // 重置线程中断状态
+                log.error("【MQTT】【" + clientId + "】重连时发生线程中断异常！异常信息：" + e);
             } catch (Exception e) {
                 e.printStackTrace();
-                log.error("【MQTT】重连时发生异常！异常信息：" + e);
+                log.error("【MQTT】【" + clientId + "】重连时发生异常！异常信息：" + e);
             }
         }*/
     }
@@ -67,7 +78,8 @@ public class LiDengSub implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) {
         log.info("=========================================================》"+ clientId +"接收消息成功！当前消息主题 : " + topic);
         CNCModel cncModel = mqttMessageDispose(message);
-        icncModelService.save(cncModel);
+        //icncModelService.save(cncModel);
+        ildcncModelService.save(cncModel); // 添加到业务系统数据表中
         log.info("cnc : " + cncModel);
     }
 
@@ -83,6 +95,7 @@ public class LiDengSub implements MqttCallback {
     /**
      * 开启连接
      */
+    @Override
     @PostConstruct
     public void  run() {
         sampleClient = getMQTTConnect(host, clientId, name, password, topic);

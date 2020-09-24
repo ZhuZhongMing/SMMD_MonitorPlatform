@@ -134,6 +134,16 @@ spring:
           username: jeecg
           password: jeecg@2020
           driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        lidengDatasource:
+          url: jdbc:sqlserver://192.168.31.48:1433;SelectMethod=cursor;DatabaseName=jeecgBootLD
+          username: sa
+          password: smmd123456
+          driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        qianfuDatasource:
+          url: jdbc:sqlserver://192.168.31.48:1433;SelectMethod=cursor;DatabaseName=jeecgBootQF
+          username: sa
+          password: smmd123456
+          driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
         #data1:
           #url: jdbc:sqlserver://127.0.0.1:1433;SelectMethod=cursor;DatabaseName=monitor_platform
           #username: sa

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.jeecg.modules.listener.subInterface.SubMqttCallBack;
 import org.jeecg.modules.system.entity.hubin.*;
 import org.jeecg.modules.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import static org.jeecg.modules.listener.utils.MQTTConnentionUtil.reconnectionMQ
  */
 @Slf4j
 @Component
-public class HuBinSub implements MqttCallback {
+public class HuBinSub implements SubMqttCallBack {
     //@Value("${mqtt.host}")
     private String host = "tcp://47.105.51.27:1883";
     //@Value("${mqtt.name}")
@@ -36,7 +37,8 @@ public class HuBinSub implements MqttCallback {
     //@Value("${mqtt.password}")
     private String password = "public";
     @Value("${mqtt.topic.hubin}")
-    private String[] topic = {"/sys/hubin/message"};
+    //private String[] topic = {"/sys/hubin/message"};
+    private String topic = "/sys/hubin/message";
     //@Value("${mqtt.clientId.hubin}")
     private String clientId = "hubin_consumer";
     /**mqtt连接**/
@@ -60,7 +62,7 @@ public class HuBinSub implements MqttCallback {
     // 连接丢失
     @Override
     public void connectionLost(Throwable throwable) {
-        reconnectionMQTT(sampleClient,clientId);
+        reconnectionMQTT(sampleClient,clientId,this);
         /*log.warn("【MQTT】【" + clientId + "】连接断开，30S后重新尝试重连......");
         while (true) {
             try {
@@ -69,6 +71,9 @@ public class HuBinSub implements MqttCallback {
                 this.run();
                 log.info("=========================================================》【MQTT】【" + clientId + "】重新连接成功");
                 break;
+            } catch (InterruptedException e) {
+                log.error("【MQTT】【" + clientId + "】重连时发生线程中断异常！异常信息：" + e);
+                Thread.interrupted(); // 重置线程中断状态
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("【MQTT】【" + clientId + "】重连时发生异常！异常信息：" + e);
@@ -170,9 +175,11 @@ public class HuBinSub implements MqttCallback {
         log.info("发送消息");
     }
 
+
     /**
      * 开启连接
      */
+    @Override
     @PostConstruct
     public void  run() {
         sampleClient = getMQTTConnect(host, clientId, name, password, topic);

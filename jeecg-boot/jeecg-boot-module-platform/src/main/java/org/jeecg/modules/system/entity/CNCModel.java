@@ -16,7 +16,7 @@ import java.util.Date;
 
 /**
  * 杭州三米明德科技有限公司
- *  CNC 数据模型
+ *  cnc 数据模型
  * @author zzm
  * date 2020-07-23
  */

@@ -2,11 +2,14 @@ package org.jeecg.modules.listener.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.jeecg.modules.listener.QianFuSub;
+import org.jeecg.modules.listener.subInterface.SubMqttCallBack;
 
 /**
  * 杭州三米明德科技有限公司
@@ -26,7 +29,7 @@ public class MQTTConnentionUtil {
      * @param topic 主题S
      * @return MQTT连接
      */
-    public static MqttClient getMQTTConnect(String host, String clientId, String name, String password, String[] topic) {
+    public static MqttClient getMQTTConnect(String host, String clientId, String name, String password, String topic) {
         log.info("host:" + host);
         log.info("clientId:" + clientId);
         log.info("name:" + name);
@@ -56,8 +59,9 @@ public class MQTTConnentionUtil {
             log.info("=============================================》 服务端地址:" + host);
             log.info("=============================================》 主题:" + JSONObject.toJSONString(topic));
 
+            //sampleClient.subscribe(String.valueOf(topic), topic.length);
+            Integer[] qos = {1,2,3};
             sampleClient.subscribe(topic);
-
         }catch(MqttException me){
             log.error("【MQTT】【" + clientId + "】连接时发生异常！异常信息：" + me);
         }
@@ -65,10 +69,13 @@ public class MQTTConnentionUtil {
     }
 
 
-    public static void reconnectionMQTT(MqttClient sampleClient, String clientId) {
-
-        QianFuSub sub = new QianFuSub();
-
+    /**
+     *
+     * @param sampleClient 客户端连接
+     * @param clientId 客户端id
+     * @param sub
+     */
+    public static void reconnectionMQTT(MqttClient sampleClient, String clientId, SubMqttCallBack sub) {
         log.warn("【MQTT】【" + clientId + "】连接断开，30S后重新尝试重连......");
         while (true) {
             try {
@@ -78,14 +85,12 @@ public class MQTTConnentionUtil {
                 log.info("=========================================================》【MQTT】【" + clientId + "】重新连接成功");
                 break;
             } catch (InterruptedException e) {
-                log.error("【MQTT】【" + clientId + "】重连时发生线程中断异常！异常信息：" + e);
                 Thread.interrupted(); // 重置线程中断状态
+                log.error("【MQTT】【" + clientId + "】重连时发生线程中断异常！异常信息：" + e);
             }catch (Exception e) {
                 e.printStackTrace();
                 log.error("【MQTT】【" + clientId + "】重连时发生异常！异常信息：" + e);
             }
         }
-
     }
-
 }

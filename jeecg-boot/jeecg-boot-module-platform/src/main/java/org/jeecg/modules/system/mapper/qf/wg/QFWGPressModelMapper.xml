@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.system.mapper.qf.wg.QFWGPressModelMapper">
+
+    <!--查询最新5条的指定设备名称的 钱富 数据-->
+    <select id="queryTOP5ByEquipmentId" resultType="org.jeecg.modules.system.entity.qianfu.QFPressModel" parameterType="org.jeecg.modules.system.entity.qianfu.QFPressModel">
+        SELECT TOP 5 *
+        FROM qf_press_model
+        WHERE equipmentsn = #{equipmentsn}
+        order by id DESC;
+    </select>
+</mapper>
